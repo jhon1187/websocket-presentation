@@ -1,0 +1,21 @@
+{
+  "name": "websocket",
+  "description": "websocket project",
+  "main": "index.html",
+  "authors": [
+    "Jonathan Araujo <jhon1187@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.0"
+  }
+}
