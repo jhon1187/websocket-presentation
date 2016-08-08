@@ -5,7 +5,7 @@ Para testar basta:
   
   -- inserir dependencia do jquery via bower <br />
   diretorio: ws-presentation/src/main/webapp/resources/js/vendor <br />
-  bower install jquery <br />
+  bower install <br />
 
   -- compilar com maven <br />
   mvn clean install eclipse:clean eclipse:eclipse -Dmaven.test.skip <br />
