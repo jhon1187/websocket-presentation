@@ -3,7 +3,7 @@ Apresentação sobre Websockets desenvolvida com websocket em html5 + jquery + j
 
 Para testar basta: 
   
-  -- inserir dependencia do jquery via bower <br />
+  -- compilar com bower <br />
   diretório: ws-presentation/src/main/webapp/resources/js/vendor <br />
   bower install <br />
 
