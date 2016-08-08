@@ -13,3 +13,6 @@ Para testar basta:
 Após, para subir a aplicação: 
 
   mvn jetty:run
+  
+Acessar admin: http://localhost:9280/websocket?admin=true
+Acessar client: http://localhost:9280/websocket
