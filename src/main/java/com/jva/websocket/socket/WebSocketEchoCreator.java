@@ -13,9 +13,23 @@ public class WebSocketEchoCreator implements WebSocketCreator {
 	@Override
 	public Object createWebSocket(ServletUpgradeRequest req, ServletUpgradeResponse resp) {
 		Map<String, List<String>> params = req.getParameterMap();
-		
+
 		webSocketEchoSocket = new WebSocketEchoSocket();
 		webSocketEchoSocket.setIdUser(String.valueOf(params.get("idUser")));
+
+		if (params.containsKey("admin")) {
+			boolean adminExist = false;
+			for (WebSocketEchoSocket user : WebSocketEchoSocket.users) {
+				if (user.getAdmin()) {
+					adminExist = true;
+					break;
+				}
+			}
+
+			if (!adminExist) {
+				webSocketEchoSocket.setAdmin(true);
+			}
+		}
 
 		return webSocketEchoSocket;
 	}

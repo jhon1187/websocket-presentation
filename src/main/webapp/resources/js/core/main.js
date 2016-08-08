@@ -26,41 +26,6 @@ function setCookieExpire(cname, cvalue, exdays) {
 
 var presentation = {};
 
-presentation.admin = false;
-
-//SET Admin Presentation
-if(location.search != null && location.search != ""){
-	var paramsLocation = location.search.split("&");
-	var paramAdmin = paramsLocation[0].split("=");
-	if(paramAdmin[0] = "admin"){
-		
-		$.ajax({
-			url : "/websocket/rest/presentation/adminExist",
-			type : "GET",
-			contentType : "text/plain; charset=utf-8",
-			dataType : "text",
-			success : function(adminExist) {
-				if(!JSON.parse(adminExist)){
-					presentation.changeAdminExist();
-				}
-			}
-		});
-		
-	}
-}
-
-presentation.changeAdminExist = function(){
-	$.ajax({
-		url : "/websocket/rest/presentation/changeAdminExist",
-		type : "POST",
-		contentType : "text/plain; charset=utf-8",
-		dataType : "text",
-		success : function() {
-			presentation.admin = true;
-		}
-	});
-}
-
 presentation.presentations = $("#presentations").find(".presentation");
 
 presentation.pageMin = 1;
@@ -87,15 +52,15 @@ presentation.next = function(){
 
 presentation.changePage = function(){
 	$("#page").html(presentation.page);
-	
+
 	$(".presentation").removeClass("active");
-	
+
 	$(presentation.presentations).each(function() {
 		  if($(this).attr("id") == "presentation_" + presentation.page){
 			 $(this).addClass("active");
 		  }
 	});
-	
+
 }
 
 presentation.getPage = function(){
@@ -115,11 +80,11 @@ presentation.getPage = function(){
 
 presentation.setChangeActive = function(){
 	presentation.changeActive = !presentation.changeActive;
-	
+
 	if(presentation.changeActive){
 		$("#btnChangeActive").addClass("activeTrue");
 		$("#btnChangeActive").removeClass("activeFalse");
-		
+
 		presentation.getPage();
 	}else{
 		$("#btnChangeActive").addClass("activeFalse");
@@ -128,24 +93,15 @@ presentation.setChangeActive = function(){
 }
 
 presentation.sendPage = function(){
-	
+
 	presentation.changePage();
-	
-	if(presentation.admin && presentation.changeActive){
-		$.ajax({
-			url : "/websocket/rest/presentation",
-			type : "POST",
-			data : String(presentation.page),
-			contentType : "text/plain; charset=utf-8",
-			dataType : "text",
-			success : function() {
-			}
-		});
+
+	if(presentation.changeActive){
+		ws.send(String(presentation.page));
 	}
 }
 
-
-
+//Alterar pagina com setas do teclado
 $("body").keydown(function(e) {
   if(e.keyCode == 37) { // left
 	  presentation.prev();
@@ -160,6 +116,18 @@ $("body").keydown(function(e) {
 
 var ws = {};
 
+function setAdminPresentation(){
+	if(location.search != null && location.search != ""){
+		var paramsLocation = location.search.split("&");
+		var paramAdmin = paramsLocation[0].replace("?", "");
+		if(paramAdmin == "admin"){
+			return paramAdmin;
+		}else{
+			return null;
+		}
+	}
+}
+
 function conectarWebSocket() {
 	if ($.isEmptyObject(ws) || ws.readyState > 1) {
 		ws = null;
@@ -171,7 +139,13 @@ function conectarWebSocket() {
 		}
 
 		var ws_url = ws_protocol + location.host + "/websocket/webSocketEcho" + "?idUser=teste";
-		
+
+		var adminPresentation = setAdminPresentation();
+
+		if(adminPresentation != null){
+			ws_url += "&" + adminPresentation;
+		}
+
 		//VALIDA TIPO DE SUPORTE WS DO BROWSER E GERA UMA INSTANCIA
 		if ("WebSocket" in window) {
 			ws = new WebSocket(ws_url);

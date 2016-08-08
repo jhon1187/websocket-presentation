@@ -11,6 +11,8 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
+import com.jva.websocket.rest.Presentation;
+
 @WebSocket
 public class WebSocketEchoSocket {
 
@@ -18,8 +20,11 @@ public class WebSocketEchoSocket {
 
 	private String idUser;
 
-	private static Set<WebSocketEchoSocket> users;
-	
+	//Apenas para informar quem eh o usuario admin da apresentacao
+	private Boolean admin = false;
+
+	public static Set<WebSocketEchoSocket> users;
+
 	public WebSocketEchoSocket() {
 		if(users == null){
 			users = new HashSet<WebSocketEchoSocket>();
@@ -40,7 +45,10 @@ public class WebSocketEchoSocket {
 	// called when a message received from the browser
 	@OnWebSocketMessage
 	public void handleMessage(String message) {
-		send(message);
+		if(admin){
+			Presentation.page = Integer.valueOf(message);
+			send(message);
+		}
 	}
 
 	// called in case of an error
@@ -80,5 +88,13 @@ public class WebSocketEchoSocket {
 
 	public void setIdUser(String idUser) {
 		this.idUser = idUser;
+	}
+
+	public Boolean getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(Boolean admin) {
+		this.admin = admin;
 	}
 }
