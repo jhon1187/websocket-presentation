@@ -4,8 +4,7 @@ Apresentação sobre Websockets desenvolvida com websocket em html5 + jquery + j
 Para testar basta: 
   
   -- compilar com bower <br />
-  diretório: ws-presentation/src/main/webapp/resources/js/vendor <br />
-  bower install <br />
+  bower install
 
   -- compilar com maven <br />
   mvn clean install eclipse:clean eclipse:eclipse -Dmaven.test.skip <br />
