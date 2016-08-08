@@ -14,5 +14,5 @@ Após, para subir a aplicação:
 
   mvn jetty:run
   
-Acessar admin: http://localhost:9280/websocket?admin=true
+Acessar admin: http://localhost:9280/websocket?admin=true <br />
 Acessar client: http://localhost:9280/websocket
