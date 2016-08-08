@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" charset="utf-8">
+		<title>Web Socket</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<link rel="stylesheet" href="/websocket/resources/css/main.css" type="text/css">
+	</head>
+
+  <body>
+  	<div id="main">
+  		<div id="menu" class="menu" align="center">
+  			<div class="btn" onclick="presentation.prev()">PREV</div>
+  			<div id="page" class="page"></div>
+  			<div class="btn btnlast" onclick="presentation.next()">NEXT</div>
+  			
+  			<div id="btnChangeActive" class="btn activeTrue" onclick="presentation.setChangeActive()">Change Active</div>
+  		</div>
+		<div id="content" class="content">
+			<div id="presentations" class="presentations">
+				
+				<div class="title" align="center">WebSockets</div>
+				
+				<div id="presentation_1" class="presentation">
+					<div class="sub_title" align="center">Comunicação bidirecional entre server e client side utilizando HTML5, JS e Microservice.</div>
+					<div class="present_content">
+						</br>
+						</br>
+						
+						<div class="right">1º Encontro Free Code Camp CG</div>
+					</div>
+				</div>
+				
+				<div id="presentation_2" class="presentation">
+					<div class="sub_title" align="center">Definição</div>
+					<div class="present_content">
+						WebSockets servem para criar uma conexão entre client e server, onde dados podem trafegar em um canal full-duplex de protocolo TCP. 
+						
+						</br>
+						</br>
+						
+						A especificação de WebSocket foi criada no HTML5 onde browsers com suporte a esta tecnologia dipõe da ativação deste serviço via javascript.
+						
+						<ul>
+							<li>Internet Explorer 10+</li>
+							<li>Mozilla Firefox 4+</li>
+							<li>Safari 5+</li>
+							<li>Google Chrome 4+</li>
+						</ul> 
+					
+						</br>
+						
+						Onde foi definida como base a nomenclatura ws (http) e wss (https) para sua utilização.
+						
+						</br>
+						</br>
+						
+						O Protocolo atual para WebSocket é o RFC6455, onde os browsers mais atuais dão suporte a este.
+					
+					</div>
+				</div>
+				
+				<div id="presentation_3" class="presentation">
+					<div class="sub_title" align="center">Por que usar?</div>
+					<div class="present_content">
+						Quando existe a necessidade de atualização de informação por parte do cliente em tempo "real" e esta informação é disponibilizada pelo server side.
+						
+						<ul>
+							<li>Jogos on-line com multiplos jogadores</li>
+							<li>Aplicativos de chat</li>
+							<li>Links para tranmissões</li>
+							<li>Redes sociais</li>
+							<li>...</li>
+						</ul>
+						
+						</br>
+						Anteriormente eram utilizadas <del>gambiarras</del>técnas como: 
+						
+						<ul>
+							<li>Polling</li>
+							<li>Ajax reverso</li>
+							<li>Timeout</li>
+							<li>...</li>
+						</ul>  
+						
+						Estas abordagens são ruins, pois elas criam uma requisição que é gerada de tempo em tempo para levar a informação do server para o client, 
+						criando uma falsa impressão de atualização sobre evento.
+					
+					</div>
+				</div>
+				
+				<div id="presentation_4" class="presentation">
+					<div class="sub_title" align="center">Utilização</div>
+					<div class="present_content">
+						Podemos separar a utilização de WebSocket em duas partes:
+						
+						<ul>
+							<li>Implementação Client side</li>
+							<li>Implementação Server side</li>
+						</ul> 
+						
+						</br> 
+					
+						O Client Websocket pode ser criado de duas maneiras: via Browser ou no próprio Servidor (webcontainer, servidor de aplicação ou outros) caso estes derem suporte.
+						
+						</br>
+						</br>
+						
+						Já o Server Websocket sempre será criado no Servidor. 
+					</div>
+				</div>
+				
+				<div id="presentation_5" class="presentation">
+					<div class="sub_title" align="center">Client Websocket</div>
+					<div class="present_content">
+						Para criarmos um client websocket, basta implementarmos a interface de websocket via javascript:
+
+						</br>
+						
+						<div class="code">
+							<pre>
+	var ws = {};
+
+	function conectarWebSocket() {
+		if ($.isEmptyObject(ws) || ws.readyState > 1) {
+			ws = null;
+	
+			//VALIDA PROTOCOLO
+			var ws_protocol = "ws://";
+			if(location.protocol == "https:"){
+			  ws_protocol = "wss://";
+			}
+	
+			var ws_url = ws_protocol + location.host + "/websocket/webSocketEcho" + "?idUser=teste";
+			
+			//VALIDA TIPO DE SUPORTE WS DO BROWSER E GERA UMA INSTANCIA
+			if ("WebSocket" in window) {
+				ws = new WebSocket(ws_url);
+			}
+			else if ("MozWebSocket" in window) {
+				ws = new MozWebSocket(ws_url);
+			}else{
+				alert("Browser sem suporte a WebSocket!");
+			}
+	
+			//INICIA O WS
+			if(ws != null){
+				ws.onopen = function(event) {
+					presentation.getPage();
+				}
+	
+				ws.onmessage = function(event) {
+					var data = event.data;
+	
+					if(presentation.changeActive){
+						presentation.page = Number(data);
+						presentation.changePage();
+					}
+				}
+	
+				ws.onclose = function(event) {
+				}
+			}
+		}
+	}
+							</pre>
+						</div>
+
+					</div>
+				</div>
+				
+				
+				<div id="presentation_6" class="presentation">
+					<div class="sub_title" align="center">Server Websocket</div>
+					<div class="present_content">
+						A criação de um server websocket necessita de servidores que deem suporte a implementação da especificação:
+
+						<ul>
+							<li>Node.js
+								<ul>
+									<li><a href="http://socket.io/">Socket.IO</a></li>
+									<li><a href="https://github.com/Worlize/WebSocket-Node">WebSocket-Node</a></li>
+									<li><a href="https://github.com/einaros/ws">ws</a></li>
+								</ul>
+							</li>
+							<li>Java
+								<ul>
+									<li><a href="http://www.eclipse.org/jetty/">Jetty</a></li>
+								</ul>
+							</li>
+							<li>Ruby
+								<ul>
+									<li><a href="http://github.com/igrigorik/em-websocket">EventMachine</a></li>
+								</ul>
+							</li>
+							<li>Python
+								<ul>
+									<li><a href="http://code.google.com/p/pywebsocket/">pywebsocket</a></li>
+									<li><a href="https://github.com/facebook/tornado">Tornado</a>
+									</li>
+								</ul>
+							</li>
+							<li>Erlang
+								<ul>
+									<li><a href="https://github.com/michilu/shirasu">Shirasu</a></li>
+								</ul>
+							</li>
+							<li>C++
+								<ul>
+									<li><a
+										href="http://git.warmcat.com/cgi-bin/cgit/libwebsockets/">libwebsockets</a></li>
+								</ul>
+							</li>
+							<li>.NET
+								<ul>
+									<li><a href="http://superwebsocket.codeplex.com/">SuperWebSocket</a></li>
+								</ul>
+							</li>
+						</ul>
+
+						</br> 
+
+					</div>
+				</div>
+				
+				<div id="presentation_7" class="presentation">
+					<div class="sub_title" align="center">Server Websocket com Jetty 9</div>
+					<div class="present_content">
+						A implementação do Server Websocket no Jetty 9, novamente para facilitar, é separada em duas partes:
+
+						<ul>
+							<li>WebSocket Servlet</li>
+							<li>Implementação de um WebSocket</li>
+						</ul> 
+						
+						</br> 
+
+						Para o WebSocket Servlet, que é chamado para instanciar uma session entre o nosso client e o server, basta criarmos o código:
+						
+						<div class="code">
+							<pre>
+	public class WebSocketEchoServlet extends WebSocketServlet {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 475543342549620882L;
+	
+		@Override
+		public void configure(WebSocketServletFactory factory) {
+			factory.getPolicy().setIdleTimeout(0);
+	
+			//SimpleEcho
+			factory.register(WebSocketEchoSocket.class);
+	
+			//AdvancedEcho
+			//factory.setCreator(new WebSocketEchoCreator());
+		}
+	}
+							</pre>
+						</div>
+
+					</div>
+				</div>
+				
+				<div id="presentation_8" class="presentation">
+					<div class="sub_title" align="center">Server Websocket com Jetty 9</div>
+					<div class="present_content">
+						Já a implemetação do WebSocket pode ser feita da seguinte maneira:
+						
+						<div class="code">
+							<pre>
+	@WebSocket
+	public class WebSocketEchoSocket {
+	
+		private Session session;
+	
+		private String idUser;
+	
+		private static Set<WebSocketEchoSocket> users;
+		
+		public WebSocketEchoSocket() {
+			if(users == null){
+				users = new HashSet<WebSocketEchoSocket>();
+			}
+		}
+	
+		@OnWebSocketConnect
+		public void handleConnect(Session session) {
+			this.session = session;
+			users.add(this);
+		}
+	
+		@OnWebSocketClose
+		public void handleClose(int statusCode, String reason) {
+			stop();
+		}
+	
+		// called when a message received from the browser
+		@OnWebSocketMessage
+		public void handleMessage(String message) {
+			send(message);
+		}
+	
+		// called in case of an error
+		@OnWebSocketError
+		public void handleError(Throwable error) {
+			error.printStackTrace();
+		}
+	
+		// sends message to client
+		public static void send(String message) {
+			try {
+				if (users != null) {
+					for (WebSocketEchoSocket user : users) {
+	
+						user.session.getRemote().sendString(message);
+	
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	
+		// closes the socket
+		private void stop() {
+			try {
+				session.disconnect();
+				users.remove(this);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	
+		public String getIdUser() {
+			return idUser;
+		}
+	
+		public void setIdUser(String idUser) {
+			this.idUser = idUser;
+		}
+	}
+							</pre>
+						</div>
+
+					</div>
+				</div>
+				
+				<div id="presentation_9" class="presentation">
+					<div class="sub_title" align="center">Server Websocket com Jetty 9</div>
+					<div class="present_content">
+						Outra possibilidade é instanciar através do nosso Websocket Servlet um Creator:
+						
+						<div class="code">
+							<pre>
+	public class WebSocketEchoCreator implements WebSocketCreator {
+	private WebSocketEchoSocket webSocketEchoSocket;
+
+		@Override
+		public Object createWebSocket(ServletUpgradeRequest req, ServletUpgradeResponse resp) {
+			Map<String, List<String>> params = req.getParameterMap();
+			
+			webSocketEchoSocket = new WebSocketEchoSocket();
+			webSocketEchoSocket.setIdUser(String.valueOf(params.get("idUser")));
+	
+			return webSocketEchoSocket;
+		}
+	}
+							</pre>
+						</div>
+
+					</div>
+				</div>
+				
+				<div id="presentation_10" class="presentation">
+					<div class="sub_title" align="center">Obrigado!!!</div>
+					<div class="present_content">
+					
+					Contatos:
+					
+						<ul>
+							<li>jhon1187@gmail.com</li>
+							<li><a href="https://github.com/jhon1187">GitHub</a></li>
+							<li><a href="https://br.linkedin.com/in/jonathan-vieira-de-araujo-a2b44672">LinkedIn</a></li>
+						</ul>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+		<div class="footer">
+			<div class="right">By Jonathan Vieira de Araujo</div>
+		</div>
+	</div>
+  	
+    <script src="/websocket/resources/js/vendor/bower_components/jquery/dist/jquery.js"></script>
+	<script src="/websocket/resources/js/core/main.js"></script>
+	
+	<script>
+		conectarWebSocket();
+	</script>
+  </body>
+</html>

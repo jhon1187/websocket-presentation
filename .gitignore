@@ -1,0 +1,9 @@
+*.classpath
+*.settings
+*target
+*.project
+*.log
+*/bower_components
+/target
+/bin
+

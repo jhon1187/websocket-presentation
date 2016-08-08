@@ -1,0 +1,107 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.jva.websocket</groupId>
+	<artifactId>websocket</artifactId>
+	<packaging>war</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>websocket Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<!-- project parameters -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.test.skip>true</maven.test.skip>
+
+		<!-- dependencies parameters -->
+		<maven-compiler-plugin.version>3.2</maven-compiler-plugin.version>
+		<maven-war-plugin.version>2.6</maven-war-plugin.version>
+		<jdk.version>1.8</jdk.version>
+		<jetty.version>9.3.11.v20160721</jetty.version>
+		<slf4j.version>1.6.1</slf4j.version>
+		<jersey.version>2.17</jersey.version>
+		<jackson.version>2.4.1</jackson.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.jetty.websocket</groupId>
+			<artifactId>websocket-server</artifactId>
+			<version>${jetty.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty.websocket</groupId>
+			<artifactId>websocket-core</artifactId>
+			<version>9.0.0.M2</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish.jersey.containers</groupId>
+			<artifactId>jersey-container-servlet</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.media</groupId>
+			<artifactId>jersey-media-json-jackson</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<finalName>websocket</finalName>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>${maven-war-plugin.version}</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>${jetty.version}</version>
+				<configuration>
+					<contextXml>${basedir}/src/main/webapp/WEB-INF/jetty-context.xml</contextXml>
+					<jettyXml>jetty.xml,jetty-http.xml</jettyXml>
+					<webApp>
+						<contextPath>/websocket</contextPath>
+					</webApp>
+					<reload>manual</reload>
+					<stopPort>9966</stopPort>
+					<stopKey>websocket-stop</stopKey>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
