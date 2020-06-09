@@ -15,3 +15,5 @@ Após, para subir a aplicação:
 
 Acessar admin: http://localhost:9280/websocket?admin <br />
 Acessar client: http://localhost:9280/websocket
+
+obs.: o admin ao alterar as paginas atualiza de todos os clients se estes estiverem permitindo.
